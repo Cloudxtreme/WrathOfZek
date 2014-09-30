@@ -3218,3 +3218,95 @@ bool ZoneDatabase::GetFactionIdsForNPC(uint32 nfl_id, std::list<struct NPCFactio
 	}
 	return true;
 }
+// Wrath of Zek - Get PvP Stats to Stat Window
+PVPStats_Struct* ZoneDatabase::GetPVPStats(const char* name)
+{
+	char errbuf[MYSQL_ERRMSG_SIZE];
+	char* query = 0;
+	MYSQL_RES *result;
+	MYSQL_ROW row;
+		
+	PVPStats_Struct* loadti = new PVPStats_Struct;
+	
+	memset(loadti,0,sizeof(PVPStats_Struct));
+	
+	if (RunQuery(query,MakeAnyLenString(&query, "SELECT kills, deaths, points, best, worst, current FROM pvpstats WHERE name=%s",name),errbuf,&result)){
+		safe_delete_array(query);
+		
+		row = mysql_fetch_row(result);
+		
+		loadti->Kills = atoi(row[0]);
+		loadti->Deaths = atoi(row[1]);
+		loadti->PVPPointsAvailable = atoi(row[2]);
+		loadti->TotalPVPPoints = atoi(row[3]);
+		loadti->BestKillStreak = atoi(row[4]);
+		loadti->WorstDeathStreak = atoi(row[5]);
+		loadti->CurrentKillStreak = atoi(row[6]);
+	
+		mysql_free_result(result);
+	} else {
+		safe_delete_array(query);
+	}
+	return loadti;
+}
+PVPStatsEntry_Struct* ZoneDatabase::GetLastPVPKill(const char* player)
+{
+	char errbuf[MYSQL_ERRMSG_SIZE];
+	char* query = 0;
+	MYSQL_RES *result;
+	MYSQL_ROW row;
+		
+	PVPStatsEntry_Struct* loadti = new PVPStatsEntry_Struct;
+	
+	memset(loadti,0,sizeof(PVPStatsEntry_Struct));
+	
+	if (RunQuery(query,MakeAnyLenString(&query, "SELECT killed, killed_lvl, killed_race, killed_class, zone, time, points FROM pvpstatsentries WHERE killer=%s ORDER BY time DESC LIMIT 1",player),errbuf,&result)){ 
+
+		safe_delete_array(query);
+		
+		row = mysql_fetch_row(result);
+		
+		strcpy(loadti->Name, row[0]);
+		loadti->Level = atoi(row[1]);
+		loadti->Race = atoi(row[2]);
+		loadti->Class = atoi(row[3]);
+		loadti->Zone = atoi(row[4]);
+		loadti->Time = atoi(row[5]);
+		loadti->Points = atoi(row[6]);
+	
+		mysql_free_result(result);
+	} else {
+		safe_delete_array(query);
+	}
+	return loadti;
+}
+PVPStatsEntry_Struct* ZoneDatabase::GetLastPVPDeath(const char* player)
+{
+	char errbuf[MYSQL_ERRMSG_SIZE];
+	char* query = 0;
+	MYSQL_RES *result;
+	MYSQL_ROW row;
+		
+	PVPStatsEntry_Struct* loadti = new PVPStatsEntry_Struct;
+	
+	memset(loadti,0,sizeof(PVPStatsEntry_Struct));
+	
+	if (RunQuery(query,MakeAnyLenString(&query, "SELECT killer, killer_lvl, killer_race, killer_class, zone, time, points FROM pvpstatsentries WHERE killed=%s ORDER BY time DESC LIMIT 1",player),errbuf,&result)){
+		safe_delete_array(query);
+		
+		row = mysql_fetch_row(result);
+		
+		strcpy(loadti->Name, row[0]);
+		loadti->Level = atoi(row[1]);
+		loadti->Race = atoi(row[2]);
+		loadti->Class = atoi(row[3]);
+		loadti->Zone = atoi(row[4]);
+		loadti->Time = atoi(row[5]);
+		loadti->Points = atoi(row[6]);
+	
+		mysql_free_result(result);
+	} else {
+		safe_delete_array(query);
+	}
+	return loadti;
+}

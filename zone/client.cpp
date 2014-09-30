@@ -4387,7 +4387,29 @@ void Client::SendPVPStats()
 	pvps->WorstDeathStreak = m_pp.PVPWorstDeathStreak;
 	pvps->CurrentKillStreak = m_pp.PVPCurrentKillStreak;
 
-	// TODO: Record and send other PVP Stats
+	// Wrath of Zek - Last PVP Kill Structure
+ 	PVPStatsEntry_Struct *pvpkill = (PVPStatsEntry_Struct *)outapp->pBuffer;
+	pvpkill = database.GetLastPVPKill(m_pp.name);
+
+	pvps->LastKill.Level = pvpkill->Level;
+	pvps->LastKill.Race = pvpkill->Race;
+	pvps->LastKill.Class = pvpkill->Class;
+	pvps->LastKill.Zone = pvpkill->Zone;
+	pvps->LastKill.Time = pvpkill->Time;
+	pvps->LastKill.Points = pvpkill->Points;
+
+	// Wrath of Zek - Last PVP Death Structure
+	PVPStatsEntry_Struct *pvpdeath = (PVPStatsEntry_Struct *)outapp->pBuffer;
+	pvpdeath = database.GetLastPVPDeath(m_pp.name);
+	
+	pvps->LastDeath.Level = pvpdeath->Level;
+	pvps->LastDeath.Race = pvpdeath->Race;
+	pvps->LastDeath.Class = pvpdeath->Class;
+	pvps->LastDeath.Zone = pvpdeath->Zone;
+	pvps->LastDeath.Time = pvpdeath->Time;
+	pvps->LastDeath.Points = pvpdeath->Points;
+
+	// Wrath of Zek - Last 50 PVP Kills
 
 	QueuePacket(outapp);
 	safe_delete(outapp);

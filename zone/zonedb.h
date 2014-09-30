@@ -252,6 +252,17 @@ public:
 	void RemoveTempFactions(Client *c);
 
 	/*
+	* Wrath of Zek - PVPStats Queries
+/
+	void	UpdatePVPStats();
+	void	RegisterPvpKill(const char* killer, int32 killer_guid, int32 killer_lvl, int32 killer_race, int32 killer_class, const char* killed, int32 killed_guid, int32 killed_lvl, int32 killed_race, int32 killed_class, int32 zone, int32 points);
+	void	GetPVPKillsLast24Hours();
+	*/
+	PVPStats_Struct*	GetPVPStats(const char* player);
+	PVPStatsEntry_Struct*	GetLastPVPKill(const char* player);
+	PVPStatsEntry_Struct*	GetLastPVPDeath(const char* player);
+	
+	/*
 	* Character Inventory
 	*/
 	bool	NoRentExpired(const char* name);
