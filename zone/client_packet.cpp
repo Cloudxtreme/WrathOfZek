@@ -9590,6 +9590,7 @@ void Client::CompleteConnect()
 	}
 
 	SendRewards();
+	SendPVPStats();
 	SendAltCurrencies();
 	database.LoadAltCurrencyValues(CharacterID(), alternate_currency);
 	SendAlternateCurrencyValues();
