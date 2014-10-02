@@ -3231,7 +3231,6 @@ PVPStats_Struct* ZoneDatabase::GetPVPStats(const char* name)
 	memset(loadti,0,sizeof(PVPStats_Struct));
 	
 	if (RunQuery(query,MakeAnyLenString(&query, "SELECT kills, deaths, points, best, worst, current FROM pvpstats WHERE name=%s",name),errbuf,&result)){
-		safe_delete_array(query);
 		
 		row = mysql_fetch_row(result);
 		
@@ -3244,7 +3243,11 @@ PVPStats_Struct* ZoneDatabase::GetPVPStats(const char* name)
 		loadti->CurrentKillStreak = atoi(row[6]);
 	
 		mysql_free_result(result);
+
+		safe_delete_array(query);
 	} else {
+		std::cerr << "Error in GetPVPStats'" << query << "' " << errbuf << std::endl;
+	
 		safe_delete_array(query);
 	}
 	return loadti;
@@ -3261,8 +3264,6 @@ PVPStatsEntry_Struct* ZoneDatabase::GetLastPVPKill(const char* player)
 	memset(loadti,0,sizeof(PVPStatsEntry_Struct));
 	
 	if (RunQuery(query,MakeAnyLenString(&query, "SELECT killed, killed_lvl, killed_race, killed_class, zone, time, points FROM pvpstatsentries WHERE killer=%s ORDER BY time DESC LIMIT 1",player),errbuf,&result)){ 
-
-		safe_delete_array(query);
 		
 		row = mysql_fetch_row(result);
 		
@@ -3275,7 +3276,11 @@ PVPStatsEntry_Struct* ZoneDatabase::GetLastPVPKill(const char* player)
 		loadti->Points = atoi(row[6]);
 	
 		mysql_free_result(result);
+
+		safe_delete_array(query);
 	} else {
+		std::cerr << "Error in GetLastPVPKill'" << query << "' " << errbuf << std::endl;
+	
 		safe_delete_array(query);
 	}
 	return loadti;
@@ -3292,8 +3297,7 @@ PVPStatsEntry_Struct* ZoneDatabase::GetLastPVPDeath(const char* player)
 	memset(loadti,0,sizeof(PVPStatsEntry_Struct));
 	
 	if (RunQuery(query,MakeAnyLenString(&query, "SELECT killer, killer_lvl, killer_race, killer_class, zone, time, points FROM pvpstatsentries WHERE killed=%s ORDER BY time DESC LIMIT 1",player),errbuf,&result)){
-		safe_delete_array(query);
-		
+	
 		row = mysql_fetch_row(result);
 		
 		strcpy(loadti->Name, row[0]);
@@ -3305,7 +3309,11 @@ PVPStatsEntry_Struct* ZoneDatabase::GetLastPVPDeath(const char* player)
 		loadti->Points = atoi(row[6]);
 	
 		mysql_free_result(result);
+
+		safe_delete_array(query);	
 	} else {
+		std::cerr << "Error in GetLastPVPDeath'" << query << "' " << errbuf << std::endl;
+	
 		safe_delete_array(query);
 	}
 	return loadti;
