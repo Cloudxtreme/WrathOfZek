@@ -111,38 +111,34 @@ void Client::CalcBonuses()
 
 int Client::CalcRecommendedLevelBonus(uint8 level, uint8 reclevel, int basestat)
 {
+	int32 statmod = basestat / 2;
+
 	if (level <= 10) {
-		int32 statmod = basestat / 2;
 		return statmod;
 	}
 
 	if (level > 10 && level <= 20) 
 	{
-		int32 statmod = ( (basestat / 2) + 1 );
-		return statmod;
+		return (statmod + 1);
 	}
 
 	if (level > 20 && level <= 30) 
 	{
-		int32 statmod = ( (basestat / 2) + 2 );
-		return statmod;
+		return (statmod + 2);
 	}
 	
 	if (level > 30 && level <= 40) 
 	{
-		int32 statmod = ( (basestat / 2) + 3 );
-		return statmod;
+		return (statmod + 3);
 	}
 	if (level > 40 && level <= 50) 
 	{
-		int32 statmod = ( (basestat / 2) + 4 );
-		return statmod;
+		return (statmod + 4);
 	}
 	
 	if (level > 50 && level <= 60) 
 	{
-		int32 statmod = ( (basestat / 2) + 5 );
-		return statmod;
+		return (statmod + 5);
 	}
 
 	return 0;
